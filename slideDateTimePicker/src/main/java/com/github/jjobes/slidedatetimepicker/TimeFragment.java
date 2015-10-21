@@ -130,71 +130,9 @@ public class TimeFragment extends Fragment
             }
         });
 
-        // If the client specifies a 24-hour time format, set it on
-        // the TimePicker.
-        if (isClientSpecified24HourTime)
-        {
-            mTimePicker.setIs24HourView(is24HourTime);
-        }
-        else
-        {
-            // If the client does not specify a 24-hour time format, use the
-            // device default.
-            mTimePicker.setIs24HourView(DateFormat.is24HourFormat(
-                getTargetFragment().getActivity()));
-        }
-
-        mTimePicker.setCurrentHour(initialHour);
-        mTimePicker.setCurrentMinute(initialMinute);
-
-        // Fix for the bug where a TimePicker's onTimeChanged() is not called when
-        // the user toggles the AM/PM button. Only applies to 4.0.0 and 4.0.3.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH &&
-            Build.VERSION.SDK_INT <= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1)
-        {
-            fixTimePickerBug18982();
-        }
-
         return v;
     }
 
-    /**
-     * Workaround for bug in Android TimePicker where the onTimeChanged() callback
-     * is not invoked when the user toggles between AM/PM. But we need to be able
-     * to detect this in order to dynamically update the tab title properly when
-     * the user toggles between AM/PM.
-     *
-     * Registered as Issue 18982:
-     *
-     * https://code.google.com/p/android/issues/detail?id=18982
-     */
-    private void fixTimePickerBug18982()
-    {
-        View amPmView = ((ViewGroup) mTimePicker.getChildAt(0)).getChildAt(3);
 
-        if (amPmView instanceof NumberPicker)
-        {
-            ((NumberPicker) amPmView).setOnValueChangedListener(new OnValueChangeListener() {
 
-                @Override
-                public void onValueChange(NumberPicker picker, int oldVal, int newVal)
-                {
-                    if (picker.getValue() == 1)  // PM
-                    {
-                        if (mTimePicker.getCurrentHour() < 12)
-                            mTimePicker.setCurrentHour(mTimePicker.getCurrentHour() + 12);
-                    }
-                    else  // AM
-                    {
-                        if (mTimePicker.getCurrentHour() >= 12)
-                            mTimePicker.setCurrentHour(mTimePicker.getCurrentHour() - 12);
-                    }
-
-                    mCallback.onTimeChanged(
-                        mTimePicker.getCurrentHour(),
-                        mTimePicker.getCurrentMinute());
-                }
-            });
-        }
-    }
 }
