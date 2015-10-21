@@ -80,10 +80,6 @@ public class TimeFragment extends Fragment
 
         Bundle b = new Bundle();
         b.putInt("theme", theme);
-        b.putInt("hour", hour);
-        b.putInt("minute", minute);
-        b.putBoolean("isClientSpecified24HourTime", isClientSpecified24HourTime);
-        b.putBoolean("is24HourTime", is24HourTime);
         f.setArguments(b);
 
         return f;
@@ -97,10 +93,6 @@ public class TimeFragment extends Fragment
             Bundle savedInstanceState)
     {
         int theme = getArguments().getInt("theme");
-        int initialHour = getArguments().getInt("hour");
-        int initialMinute = getArguments().getInt("minute");
-        boolean isClientSpecified24HourTime = getArguments().getBoolean("isClientSpecified24HourTime");
-        boolean is24HourTime = getArguments().getBoolean("is24HourTime");
 
         // Unless we inflate using a cloned inflater with a Holo theme,
         // on Lollipop devices the TimePicker will be the new-style
